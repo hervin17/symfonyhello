@@ -1,14 +1,11 @@
 ---
 
 variables:
-  ARCHIVE_PATH: ${CI_PROJECT_PATH}/${SRC_ARCHIVE_FILE}
   SRC_DIR: "srcproject"
   TAR_NAME: "{{APP_NAME}}.tar.gz"
   APP_NAME: symfonyhello
   TARGET_DIR: "ansible"
 
-
-cache:
 
 
 stages:
@@ -20,9 +17,23 @@ stages:
 
 build_job:
   stage: build
-  image: kariae/symfony-php:latest
+  image:
+    name: php:7.2-alpine
+    entrypoint: [""]
   script:
-    - 
+    - apk add gettext libintl git
+    - cd ${SRC_DIR}
+    - touch .env.${ENV} .env.template
+    - envsubst < .env.template >> .env
+    - envsubst < .env.${ENV} >> .env
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer 
+    - composer global require hirak/prestissimo && composer install --ignore-platform-reqs --prefer-dist --no-scripts
+    - tar czf ../ansible/${SRC_ARCHIVE_FILE} --exclude='.env.*'  --exclude='.git' --exclude='node_modules' .
+  artifacts:
+    paths:
+      - ansible/${SRC_ARCHIVE_FILE}
+    expire_in: 2d
+
 
 test_job:
   stage: test
@@ -35,7 +46,7 @@ package_job:
   stage: package 
   image: centos:7
   script:
-    - tar -czf $SRC/$TAR_NAME  $SRC
+    - tar -czf $SRC_DIR/$TAR_NAME  $SRC --exclude='.env.*'  --exclude='.git'
   artifacts:
     paths:
       - ${TARGET_DIR}/${TAR_NAME}
