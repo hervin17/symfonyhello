@@ -1,0 +1,19 @@
+-------------------- Auto-Git Log --------------------
+		Tue Oct 27 2020 12:00:56 GMT+0000 (Greenwich Mean Time)
+------------------------------------------------------
+
+Modified files:
+* .gitlab-ci.yml
+* ansible/deploy.yml
+
+
+Created files:
+* .autogit/logs/log-27-9-2020-11-30-49.txt
+* ansible/ansible.cfg
+* ansible/inventory
+
+
+Deleted files:
+
+
+Renamed files:

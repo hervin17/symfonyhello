@@ -1,10 +1,11 @@
 ---
 
 variables:
-  SRC_ARCHIVE_FILE: ${CI_PROJECT_NAME}.tar.gz
   ARCHIVE_PATH: ${CI_PROJECT_PATH}/${SRC_ARCHIVE_FILE}
-  BIN_ARCHIVE_FILE: ${CI_PROJECT_NAME}-delivery-bin.tar.gz
   SRC_DIR: "srcproject"
+  TAR_NAME: "{{APP_NAME}}.tar.gz"
+  APP_NAME: symfonyhello
+  TARGET_DIR: "ansible"
 
 
 cache:
@@ -19,21 +20,41 @@ stages:
 
 build_job:
   stage: build
-  image: 
+  image: kariae/symfony-php:latest
   script:
-
+    - 
 
 test_job:
   stage: test
-  image:
+  image: kariae/symfony-php:latest
   script:  
-
+    - php $SRC_DIR/bin/phpunit
+  
 
 package_job:
   stage: package 
+  image: centos:7
   script:
+    - tar -czf $SRC/$TAR_NAME  $SRC
+  artifacts:
+    paths:
+      - ${TARGET_DIR}/${TAR_NAME}
+    expire_in: 2d
+  
 
+    
 
 packages_job:
   stage: deploy
+  image: ansible/centos7-ansible
+  before_script:
+    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" >> ~/.ssh/config'
   script:
+    - cd ansible
+    - ansible-playbook -e tar_file=${TAR_NAME} -e app_name=${APP_NAME} deploy.yml 
+
