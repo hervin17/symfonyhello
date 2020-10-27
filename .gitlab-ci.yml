@@ -1,0 +1,33 @@
+---
+
+variables:
+  SRC_ARCHIVE_FILE: ${CI_PROJECT_NAME}.tar.gz
+  ARCHIVE_PATH: ${CI_PROJECT_PATH}/${SRC_ARCHIVE_FILE}
+  BIN_ARCHIVE_FILE: ${CI_PROJECT_NAME}-delivery-bin.tar.gz
+  SRC_DIR: "srcproject"
+
+
+cache:
+
+
+stages:
+  - build
+  - test 
+  - packages 
+
+
+build_job:
+  stage: build
+  image: 
+  script:
+
+
+test_job:
+  stage: test
+  image:
+  script:
+
+packages_job:
+   stage: packages
+   image:
+   script:
