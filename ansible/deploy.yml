@@ -1,0 +1,61 @@
+---
+
+- hosts: all
+  become: false
+  vars:
+    tmp_dir: /var/tmp
+  tasks:
+
+### preparation de l'environnement de deploiement
+    - name: verifier que php et php-xml sont installés
+      yum: name={item} status=present
+      with_items:
+        - php 
+        - php-xml
+        - git
+
+    - name: installer symfony
+      command: 
+        wget https://get.symfony.com/cli/installer -O - | bash
+        sudo mv /home/vagrant/.symfony/bin/symfony /usr/local/bin/symfony
+
+    - name: installer composer
+      command:
+        cd /home/vagrant
+        php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+        php composer-setup.php
+        php -r "unlink('composer-setup.php');"
+        sudo mv composer.phar /usr/local/bin/composer
+
+### deploiement du projet symfony
+
+    - name: depot du projet sur le serveur (au format tar.gz)
+      copy: 
+          src:  "ansible/{{app_name}}.tar.gz"
+          dest: "{{temp_dir}}"
+
+    - name: decompresser le projet  dans le document root
+      unarchive:
+        src: "{{temp_dir}}/{{app_name}}.tar.gz"
+        dest: "/var/www/{{app_name}}"
+
+    - name: installer les dependances composer du projet (symfony/apache-pack)
+      command: composer require symfony/apache-pack
+
+    - name: créer un fichier virtualhost pour le projet symfony 
+      template:
+        src: symfony.conf.j2
+        dest: "/etc/httpd/conf.d/{{ app_name }}.conf"
+        owner: vagrant
+
+    - name: copier le contenu du  .env dans le fichier .env.local
+      copy:
+        src: /var/www/{{app_name}}/.env
+        dest: /var/www/{{app_name}}/.env.local
+
+    - name: redemarrer httpd
+      command: systemctl restart httpd
+
+
+    #- name: modifier le database_url du fichier .env.local
+    #  lineinfile:

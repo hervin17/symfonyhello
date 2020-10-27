@@ -13,7 +13,8 @@ cache:
 stages:
   - build
   - test 
-  - packages 
+  - package
+  - deploy 
 
 
 build_job:
@@ -25,9 +26,14 @@ build_job:
 test_job:
   stage: test
   image:
+  script:  
+
+
+package_job:
+  stage: package 
   script:
 
+
 packages_job:
-   stage: packages
-   image:
-   script:
+  stage: deploy
+  script:
