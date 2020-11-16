@@ -8,7 +8,7 @@
 
 ### preparation de l'environnement de deploiement
     - name: verifier que php et php-xml sont installés
-      yum: name={item} status=present
+      yum: name={item} state=present
       with_items:
         - php 
         - php-xml
