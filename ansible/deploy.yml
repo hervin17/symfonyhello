@@ -38,6 +38,8 @@
       unarchive:
         src: "{{temp_dir}}/{{app_name}}.tar.gz"
         dest: "/var/www/{{app_name}}"
+        remote_src: yes
+
 
     - name: installer les dependances composer du projet (symfony/apache-pack)
       command: composer require symfony/apache-pack
