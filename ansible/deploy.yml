@@ -9,9 +9,9 @@
 ### preparation de l'environnement de deploiement
 ### il faut installer le APACHE MYSQL et PHP sur le serveur de deploiement 
 
-    - name: verifier que php et php-xml sont installés
-      yum: name="{{ item }}" state=present
-      with_items:
+    #- name: verifier que php et php-xml sont installés
+    #  yum: name="{{ item }}" state=present
+    #  with_items:
    #     - php 
    #     - php-xml
    #     - git
