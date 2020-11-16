@@ -28,7 +28,7 @@ build_job:
     - envsubst < .env.${ENV} >> .env
     - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer 
     - cd ..
-    - tar czf ansible/${TAR_NAME} ansible/ --exclude='.env.*'  --exclude='.git' --exclude='node_modules' 
+    - tar czf ansible/${TAR_NAME} ansible/ --exclude='.env.*'  --exclude='.git' --exclude='node_modules' .
   artifacts:
     paths:
       - ansible/${SRC_ARCHIVE_FILE}
