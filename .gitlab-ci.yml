@@ -18,7 +18,7 @@ stages:
 build_job:
   stage: build
   image:
-    name: php:7.2-alpine
+    name: php:7.4-alpine
     entrypoint: [""]
   script:
     - apk add gettext libintl git
@@ -27,7 +27,7 @@ build_job:
     - envsubst < .env.template >> .env
     - envsubst < .env.${ENV} >> .env
     - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer 
-    - composer global require hirak/prestissimo && composer install --ignore-platform-reqs --prefer-dist --no-scripts
+    - composer install --ignore-platform-reqs --prefer-dist --no-scripts
     - tar czf ../ansible/${SRC_ARCHIVE_FILE} --exclude='.env.*'  --exclude='.git' --exclude='node_modules' .
   artifacts:
     paths:
@@ -54,7 +54,6 @@ package_job:
   
 
     
-
 packages_job:
   stage: deploy
   image: ansible/centos7-ansible
