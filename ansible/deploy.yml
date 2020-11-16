@@ -7,20 +7,22 @@
   tasks:
 
 ### preparation de l'environnement de deploiement
+### il faut installer le APACHE MYSQL et PHP sur le serveur de deploiement 
+
     - name: verifier que php et php-xml sont installés
-      yum: name={item} state=present
+      yum: name="{{ item }}" state=present
       with_items:
-        - php 
-        - php-xml
+   #     - php 
+   #     - php-xml
         - git
 
     - name: installer symfony
-      command: 
+      command: >
         wget https://get.symfony.com/cli/installer -O - | bash
         sudo mv /home/vagrant/.symfony/bin/symfony /usr/local/bin/symfony
 
     - name: installer composer
-      command:
+      command: >
         cd /home/vagrant
         php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
         php composer-setup.php
@@ -44,11 +46,12 @@
     - name: installer les dependances composer du projet (symfony/apache-pack)
       command: composer require symfony/apache-pack
 
-    - name: créer un fichier virtualhost pour le projet symfony 
-      template:
-        src: symfony.conf.j2
-        dest: "/etc/httpd/conf.d/{{ app_name }}.conf"
-        owner: vagrant
+## le fichier virtualhost de symfony doit etre editer sur le serveur de deploiement
+##    - name: créer un fichier virtualhost pour le projet symfony 
+#      template:
+#        src: symfony.conf.j2
+#        dest: "/etc/httpd/conf.d/{{ app_name }}.conf"
+#        owner: vagrant
 
     - name: copier le contenu du  .env dans le fichier .env.local
       copy:
