@@ -14,16 +14,21 @@
         name: "{{ item }}" 
         state: present
       with_items:
-   #     - php 
-   #     - php-xml
+         - php 
+         - php-xml
          - git
          - wget 
+    
+    - name: telecharger Installer pour symfony
+      get_url:
+        url: https://get.symfony.com/cli/installer
+        dest: /home/vagrant
+        mode: 0777
 
-    - name: installer symfony
-      command: >
-        wget https://get.symfony.com/cli/installer -O - | bash
-        sudo mv /home/vagrant/.symfony/bin/symfony /usr/local/bin/symfony
-
+    - name: installer la commande symfony
+      command: mv /home/vagrant/.symfony/bin/symfony /usr/local/bin/symfony
+   #     wget https://get.symfony.com/cli/installer -O - | bash
+      
     - name: installer composer
       command: >
         cd /home/vagrant
