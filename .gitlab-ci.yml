@@ -28,16 +28,18 @@ build_job:
     - envsubst < .env.${ENV} >> .env
     - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer 
     - cd ..
-    - tar czf ansible/${TAR_NAME} ansible/ --exclude='.env.*'  --exclude='.git' --exclude='node_modules' .
+    - mkdir app
+    - tar czf app/${TAR_NAME} ansible/ --exclude='.env.*'  --exclude='.git' --exclude='node_modules' .
   artifacts:
     paths:
-      - ansible/${SRC_ARCHIVE_FILE}
+      - app/${SRC_ARCHIVE_FILE}
     expire_in: 2d
 
 
 test_job:
   stage: test
   image: kariae/symfony-php:latest
+  allow_failure: true
   script:  
     - php $SRC_DIR/bin/phpunit
   
@@ -46,10 +48,10 @@ package_job:
   stage: package 
   image: centos:7
   script:
-    - tar -czf $SRC_DIR/$TAR_NAME  $SRC --exclude='.env.*'  --exclude='.git'
+    - tar -czf app/$TAR_NAME  $SRC --exclude='.env.*'  --exclude='.git'
   artifacts:
     paths:
-      - ${TARGET_DIR}/${TAR_NAME}
+      - app/${TAR_NAME}
     expire_in: 2d
   
 
