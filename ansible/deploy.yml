@@ -19,17 +19,15 @@
          - git
          - wget 
     
-  #  - name: telecharger Installer pour symfony
-   #   get_url:
-    #    url: https://get.symfony.com/cli/installer
-      #  dest: /home/vagrant
-       # mode: 0777
-
     - name: telecharger Installer pour symfony
-      command: wget https://get.symfony.com/cli/installer -O - | bash
+      get_url:
+        url: https://get.symfony.com/cli/installer
+        dest: /home/vagrant
+        mode: 0777
 
-    - name: installer la commande symfony
-      command: mv /home/vagrant/.symfony/bin/symfony /usr/local/bin/symfony
+
+    #- name: installer la commande symfony
+     # command: mv /home/vagrant/.symfony/bin/symfony /usr/local/bin/symfony
    #     wget https://get.symfony.com/cli/installer -O - | bash
       
     - name: installer composer
