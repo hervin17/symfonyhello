@@ -9,12 +9,15 @@
 ### preparation de l'environnement de deploiement
 ### il faut installer le APACHE MYSQL et PHP sur le serveur de deploiement 
 
-    #- name: verifier que php et php-xml sont installés
-    #  yum: name="{{ item }}" state=present
-    #  with_items:
+    - name: verifier que php et php-xml sont installés
+      yum: 
+        name: "{{ item }}" 
+        state: present
+      with_items:
    #     - php 
    #     - php-xml
-   #     - git
+         - git
+         - wget 
 
     - name: installer symfony
       command: >
@@ -33,8 +36,8 @@
 
     - name: depot du projet sur le serveur (au format tar.gz)
       copy: 
-          src:  "ansible/{{app_name}}.tar.gz"
-          dest: "{{temp_dir}}"
+        src:  "ansible/{{app_name}}.tar.gz"
+        dest: "{{temp_dir}}"
 
     - name: decompresser le projet  dans le document root
       unarchive:
