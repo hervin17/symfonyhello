@@ -30,6 +30,7 @@ build_job:
     - cd ..
     - mkdir app
     - tar czf app/${TAR_NAME} ansible/ --exclude='.env.*'  --exclude='.git' --exclude='node_modules' .
+    - mv app/${TAR_NAME}  ansible/
   artifacts:
     paths:
       - app/${SRC_ARCHIVE_FILE}
@@ -47,6 +48,7 @@ test_job:
 package_job:
   stage: package 
   image: centos:7
+  allow_failure: true
   script:
     - tar -czf app/$TAR_NAME  $SRC --exclude='.env.*'  --exclude='.git'
   artifacts:
