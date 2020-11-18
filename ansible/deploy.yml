@@ -63,7 +63,7 @@
       with_items:
   #      - mkdir "/var/www/{{app_name}}"
         - cp -R "{{tmp_dir}}/srcproject/*"  "/var/www/{{app_name}}/"
-         
+      remote_src: yes  
 
     - name: installer les dependances composer du projet (symfony/apache-pack)
       command: >
