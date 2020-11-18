@@ -49,20 +49,20 @@
     - name: decompresser le projet
       unarchive:
         src: "{{tmp_dir}}/{{tar_file}}"
-        dest: "{{tmp_dir}}/"
+        dest: "/var/www/"
         remote_src: yes
  
-    - name: creer le docroot de symfony
-      file:
-        path: "/var/www/{{app_name}}"
-        state: directory
-        mode: '0755'
+    - name: renommer le dossier decompresser
+      command: mv /var/www/srcproject "/var/www/{{app_name}}"
 
-    - name: creation du document root du projet
-      command: "{{ item }}"
-      with_items:
-  #      - mkdir "/var/www/{{app_name}}"
-        - cp -R "{{tmp_dir}}/srcproject/*   /var/www/{{app_name}}/"  
+#    - name: creer le docroot de symfony
+#      file:
+#        path: "/var/www/{{app_name}}"
+#        state: directory
+#        mode: '0755'
+
+   # - name: creation du document root du projet
+   #   command: cp -R "{{tmp_dir}}/srcproject/*"   "/var/www/{{app_name}}/"  
 
     - name: installer les dependances composer du projet (symfony/apache-pack)
       command: >
