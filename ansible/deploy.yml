@@ -47,7 +47,7 @@
 
     - name: decompresser le projet  dans le document root
       unarchive:
-        src: "{{tmp_dir}}/{{app_name}}"
+        src: "{{tmp_dir}}/{{tar_file}}"
         dest: "/var/www/"
         remote_src: yes
 
