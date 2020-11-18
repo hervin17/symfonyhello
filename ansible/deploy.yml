@@ -42,12 +42,12 @@
 
     - name: depot du projet sur le serveur (au format tar.gz)
       copy: 
-        src:  "ansible/{{app_name}}.tar.gz"
+        src:  "{{target_dir}}/{{tar_file}}"
         dest: "{{tmp_dir}}"
 
     - name: decompresser le projet  dans le document root
       unarchive:
-        src: "{{tmp_dir}}/{{app_name}}.tar.gz"
+        src: "{{tmp_dir}}/{{app_name}}"
         dest: "/var/www/{{app_name}}"
         remote_src: yes
 

@@ -4,7 +4,7 @@ variables:
   SRC_DIR: srcproject
   TAR_NAME: ${APP_NAME}.tar.gz
   APP_NAME: symfonyhello
-  TARGET_DIR: ansible
+  TARGET_DIR: ${CI_PROJECT_DIR}/ansible
 
 
 
@@ -57,5 +57,5 @@ packages_job:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" >> ~/.ssh/config'
   script:
     - cd ansible
-    - ansible-playbook -e tar_file=${TAR_NAME} -e app_name=${APP_NAME} deploy.yml 
+    - ansible-playbook -e target_dir=${TARGET_DIR} -e tar_file=${TAR_NAME} -e app_name=${APP_NAME} deploy.yml 
 
