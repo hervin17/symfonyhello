@@ -27,12 +27,10 @@ build_job:
     - envsubst < .env.${ENV} >> .env
     - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer 
     - cd ..
-    - mkdir app
-    - tar czf app/${TAR_NAME} ${TARGET_DIR} --exclude='.env.*'  --exclude='.git' --exclude='node_modules' .
-    - cp app/${TAR_NAME}  ${TARGET_DIR}
+    - tar czf ${TARGET_DIR}/${TAR_NAME} ${SRC_DIR} --exclude='.env.*'  --exclude='.git' --exclude='node_modules' 
   artifacts:
     paths:
-      - app/${TAR_NAME}
+      - ${TARGET_DIR}/${TAR_NAME}
     expire_in: 2d
 
 
