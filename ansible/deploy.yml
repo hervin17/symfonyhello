@@ -31,8 +31,8 @@
    #     wget https://get.symfony.com/cli/installer -O - | bash
       
     - name: installer composer
-      command: >
-        cd /home/vagrant
+      command: "{{ item }}"
+      with_items:
         php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
         php composer-setup.php
         php -r "unlink('composer-setup.php');"
@@ -48,12 +48,13 @@
     - name: decompresser le projet  dans le document root
       unarchive:
         src: "{{tmp_dir}}/{{tar_file}}"
-        dest: "/var/www/"
-        remote_src: yes
+        dest: "/var/www/{{app_name}}"
 
 
     - name: installer les dependances composer du projet (symfony/apache-pack)
-      command: composer require symfony/apache-pack
+      command: >
+        cd "/var/www/{{app_name}}"
+        composer require symfony/apache-pack
 
 ## le fichier virtualhost de symfony doit etre editer sur le serveur de deploiement
 ##    - name: créer un fichier virtualhost pour le projet symfony 
