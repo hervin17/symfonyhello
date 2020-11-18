@@ -49,6 +49,7 @@
       unarchive:
         src: "{{tmp_dir}}/{{tar_file}}"
         dest: "{{tmp_dir}}/"
+        remote_src: yes
 
     - name: creation du document root du projet
       command: "{{ item }}"
