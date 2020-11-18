@@ -1,17 +1,16 @@
 ---
 
 variables:
-  SRC_DIR: "srcproject"
-  TAR_NAME: "{{APP_NAME}}.tar.gz"
+  SRC_DIR: srcproject
+  TAR_NAME: ${APP_NAME}.tar.gz
   APP_NAME: symfonyhello
-  TARGET_DIR: "ansible"
+  TARGET_DIR: ansible
 
 
 
 stages:
   - build
   - test 
-  - package
   - deploy 
 
 
@@ -29,11 +28,11 @@ build_job:
     - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer 
     - cd ..
     - mkdir app
-    - tar czf app/${TAR_NAME} ansible/ --exclude='.env.*'  --exclude='.git' --exclude='node_modules' .
-    - cp app/${TAR_NAME}  ansible/
+    - tar czf app/${TAR_NAME} ${TARGET_DIR} --exclude='.env.*'  --exclude='.git' --exclude='node_modules' .
+    - cp app/${TAR_NAME}  ${TARGET_DIR}
   artifacts:
     paths:
-      - app/${SRC_ARCHIVE_FILE}
+      - app/${TAR_NAME}
     expire_in: 2d
 
 
@@ -44,19 +43,7 @@ test_job:
   script:  
     - php $SRC_DIR/bin/phpunit
   
-
-package_job:
-  stage: package 
-  image: centos:7
-  allow_failure: true
-  script:
-    - tar -czf app/$TAR_NAME  $SRC --exclude='.env.*'  --exclude='.git'
-  artifacts:
-    paths:
-      - app/${TAR_NAME}
-    expire_in: 2d
   
-
     
 packages_job:
   stage: deploy
