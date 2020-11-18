@@ -45,11 +45,17 @@
         src:  "{{target_dir}}/{{tar_file}}"
         dest: "{{tmp_dir}}"
 
-    - name: decompresser le projet  dans le document root
+    - name: decompresser le projet
       unarchive:
         src: "{{tmp_dir}}/{{tar_file}}"
-        dest: "/var/www/{{app_name}}"
+        dest: "{{tmp_dir}}/"
 
+    - name: creation du document root du projet
+      command: "{{ item }}"
+      with_items:
+        - mkdir "/var/www/{{app_name}}"
+        - cp "{{tmp_dir}}/srcprojet/*"  "/var/www/{{app_name}}/"
+         
 
     - name: installer les dependances composer du projet (symfony/apache-pack)
       command: >
