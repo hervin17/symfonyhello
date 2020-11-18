@@ -80,6 +80,7 @@
       copy:
         src: /var/www/{{app_name}}/.env
         dest: /var/www/{{app_name}}/.env.local
+        remote_src: yes
 
     - name: redemarrer httpd
       command: systemctl restart httpd
